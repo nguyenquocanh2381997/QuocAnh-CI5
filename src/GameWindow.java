@@ -35,6 +35,7 @@ public class GameWindow extends JFrame {
                         gameCanvas.player.angle = 30;
 
                 }
+                System.out.println("hi");
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                         gameCanvas.player.angle = -30;
                 }

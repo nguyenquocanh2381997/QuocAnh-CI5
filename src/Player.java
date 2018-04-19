@@ -8,7 +8,7 @@ public class Player {
     public int angle;
 
 
-    public Player(Vector2D position, Vector2D velocity, Color color) {
+    public Player(Vector2D position, Vector2D velocity) {
         this.position = position;
         this.velocity = velocity;
         this.renderer = new PolygonRenderer(Color.red,
