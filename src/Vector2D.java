@@ -50,7 +50,7 @@ public class Vector2D {
         return new Vector2D(this.x, this.y);
     }
 
-    public float lenght(){
+    public float lenght(){  //Do dai Vector
         return (float) Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
@@ -72,7 +72,7 @@ public class Vector2D {
         return this.subtract(vector2D.x, vector2D.y);
     }
 
-    public Vector2D normalize(){
+    public Vector2D normalize(){ //chuan hoa Vector - huong giu nguyen
         float lenght = this.lenght();
         return new Vector2D(this.x / lenght, this.y / lenght);
     }
@@ -81,7 +81,7 @@ public class Vector2D {
         double radian = Math.toRadians(angle);
         float sin =(float) Math.sin(radian);
         float cos = (float)Math.cos(radian);
-        return  new Vector2D(this.x * cos - this.y * sin, this.x *sin + this.y * cos);
+        return  new Vector2D(this.x * cos - this.y * sin, this.x * sin + this.y * cos);
     }
 
 

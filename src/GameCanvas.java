@@ -1,27 +1,26 @@
 import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class GameCanvas extends JPanel {
-    private Star star;
-    private Circle circle; // enemy
 
     private BufferedImage backBuffered;
     private Graphics graphic;
 
     private List<Star> stars;
-    private List<Circle> circles;
+    private List<Enemy> enemies;
 
-    private Player player;
+    public Player player;
 
     private Random random;
-    private int count;
+    private int count = 0;
+    private int countEnemy = 0;
     private BackGround backGround;
 
 
@@ -31,12 +30,16 @@ public class GameCanvas extends JPanel {
 
         this.setSize(1024, 600);
         this.stars = new ArrayList<>();
-        this.circles = new ArrayList<>();
-        this.setupBackBuffered();
-        this.setVisible(true);
-        this.backGround = new BackGround(0, 0 , Color.black);
-        random = new Random();
+        this.enemies = new ArrayList<>();
 
+        this.setupBackBuffered();
+        this.backGround = new BackGround(0, 0 , Color.black);
+
+        this.player = new Player();
+        this.player.position.set(200,200);
+
+        random = new Random();
+        this.setVisible(true);
     }
 
     private void setupBackBuffered(){
@@ -53,11 +56,10 @@ public class GameCanvas extends JPanel {
 
     public void renderAll(){
         this.backGround.render(this.graphic);
-
         this.stars.forEach(star -> star.render(this.graphic));
-        this.circles.forEach(circle -> circle.render(graphic));
+//        this.enemy.render(this.graphic);
+        this.enemies.forEach(enemy -> enemy.render(this.graphic));
         this.player.render(this.graphic);
-
         this.repaint();
     }
 
@@ -68,57 +70,55 @@ public class GameCanvas extends JPanel {
         createStar();
         this.stars.forEach(star -> star.run());
 
-        this.createCircle();
-        this.circles.forEach(circle -> circle.run());
-
-        this.createPlayer();
         this.player.run();
+        this.createrEnemy();
+        this.runEnemy();
+
+//        this.enemy.run();
+//        this.enem.velocity.set(this.player.position.subtract(this.enemy.position).normalize()).multiply(1.5f);
     }
 
     public void createStar() {
-        if (count == 30) {
-             this.star = new Star(
-                     new Vector2D(1024, this.random.nextInt(700)), // position
-                     this.loadImage("resources-rocket-master/resources/images/star.png"),
-                     15, 15,
-                     new Vector2D(this.random.nextInt(2) + 1, 0)
-                   );
-            stars.add(star);
+        if (this.count == 30) {
+            Star star = new Star();
+            star.position.set(1024, this.random.nextInt(600));
+            star.velocity.set(this.random.nextInt(2)+1 ,0);
+            this.stars.add(star);
             this.count = 0;
         } else {
-            count++;
-        }
-
-    }
-
-    public void createCircle() {
-        if (count == 30) {
-            this.circle = new Circle(
-                    new Vector2D(this.random.nextInt(1024),this.random.nextInt(700)), //cho enemy xuat hien ngau nhien
-                    this.loadImage("resources-rocket-master/resources/images/circle.png"),
-                    15 , 15,
-                    new Vector2D(this.random.nextInt(2) + 1,0));
-            this.circles.add(circle);
-            this.count = 0;
-        }else{
-            this.count +=1;
+            count += 1;
         }
     }
 
-    private void createPlayer(){
-        this.player = new Player(
-                new Vector2D(random.nextInt(1024),random.nextInt(600)),
-                new Vector2D(this.random.nextInt(2) + 1,0),
-                Color.RED
-        );
+    public void createrEnemy(){
+        if (this.countEnemy == 50){
+           Enemy enemy = new Enemy();
+           enemy.position.set(this.random.nextInt(1024), this.random.nextInt(600));
+           enemy.velocity.set(this.random.nextInt(2)+1 ,0);
+           this.enemies.add(enemy);
+           this.countEnemy = 0;
+        }else {
+            countEnemy += 1;
+        }
     }
 
-    private  BufferedImage loadImage(String path){
+    public void runEnemy(){
+        this.enemies.forEach(enemy -> enemy.velocity.set(
+                player.position
+                        .subtract(enemy.position)
+                        .normalize()
+        ).multiply(2));
+        this.enemies.forEach(enemy -> enemy.run());
+    }
+
+    private BufferedImage loadImage(String path) {
         try {
             return ImageIO.read(new File(path));
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }
+
+
