@@ -2,12 +2,17 @@ import java.awt.*;
 
 public class Player {
     public Vector2D position;
+    public Vector2D velocity;
     private PlayerMove playerMove;
     private PolygonRenderer renderer;
+    public int angle;
 
-    public Player() {
-        this.position = new Vector2D();
-        this.renderer = new PolygonRenderer(Color.red, new Vector2D(),
+
+    public Player(Vector2D position, Vector2D velocity, Color color) {
+        this.position = position;
+        this.velocity = velocity;
+        this.renderer = new PolygonRenderer(Color.red,
+                new Vector2D(),
                 new Vector2D(0, 16),
                 new Vector2D(20, 8)
         );
@@ -16,7 +21,7 @@ public class Player {
 
     public void run() {
         this.playerMove.run(this);
-        this.renderer.angle = this.playerMove.angle;
+        this.position.addUp(this.velocity.rotate(this.angle));
     }
 
     public void render(Graphics graphics) {

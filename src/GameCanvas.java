@@ -24,7 +24,6 @@ public class GameCanvas extends JPanel {
     private BackGround backGround;
 
 
-
     public GameCanvas() {
         //SetSize
 
@@ -33,16 +32,16 @@ public class GameCanvas extends JPanel {
         this.enemies = new ArrayList<>();
 
         this.setupBackBuffered();
-        this.backGround = new BackGround(0, 0 , Color.black);
+        this.backGround = new BackGround(0, 0, Color.black);
 
-        this.player = new Player();
-        this.player.position.set(200,200);
+        this.player = new Player(new Vector2D(200, 200), new Vector2D(2,0), Color.red);
+        this.player.position.set(200, 200);
 
         random = new Random();
         this.setVisible(true);
     }
 
-    private void setupBackBuffered(){
+    private void setupBackBuffered() {
         this.backBuffered = new BufferedImage(1024, 600, BufferedImage.TYPE_4BYTE_ABGR);
         this.graphic = this.backBuffered.getGraphics();
     }
@@ -51,10 +50,10 @@ public class GameCanvas extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         //back buffered de lat phia trc
-        g.drawImage(this.backBuffered,0, 0,null);
+        g.drawImage(this.backBuffered, 0, 0, null);
     }
 
-    public void renderAll(){
+    public void renderAll() {
         this.backGround.render(this.graphic);
         this.stars.forEach(star -> star.render(this.graphic));
 //        this.enemy.render(this.graphic);
@@ -64,8 +63,7 @@ public class GameCanvas extends JPanel {
     }
 
 
-
-    public void runAll(){
+    public void runAll() {
         //cap nhat tat ca moi thu
         createStar();
         this.stars.forEach(star -> star.run());
@@ -82,7 +80,7 @@ public class GameCanvas extends JPanel {
         if (this.count == 30) {
             Star star = new Star();
             star.position.set(1024, this.random.nextInt(600));
-            star.velocity.set(this.random.nextInt(2)+1 ,0);
+            star.velocity.set(this.random.nextInt(2) + 1, 0);
             this.stars.add(star);
             this.count = 0;
         } else {
@@ -90,19 +88,19 @@ public class GameCanvas extends JPanel {
         }
     }
 
-    public void createrEnemy(){
-        if (this.countEnemy == 50){
-           Enemy enemy = new Enemy();
-           enemy.position.set(this.random.nextInt(1024), this.random.nextInt(600));
-           enemy.velocity.set(this.random.nextInt(2)+1 ,0);
-           this.enemies.add(enemy);
-           this.countEnemy = 0;
-        }else {
+    public void createrEnemy() {
+        if (this.countEnemy == 50) {
+            Enemy enemy = new Enemy();
+            enemy.position.set(this.random.nextInt(1024), this.random.nextInt(600));
+            enemy.velocity.set(this.random.nextInt(2) + 1, 0);
+            this.enemies.add(enemy);
+            this.countEnemy = 0;
+        } else {
             countEnemy += 1;
         }
     }
 
-    public void runEnemy(){
+    public void runEnemy() {
         this.enemies.forEach(enemy -> enemy.velocity.set(
                 player.position
                         .subtract(enemy.position)
@@ -110,15 +108,5 @@ public class GameCanvas extends JPanel {
         ).multiply(2));
         this.enemies.forEach(enemy -> enemy.run());
     }
-
-    private BufferedImage loadImage(String path) {
-        try {
-            return ImageIO.read(new File(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
-
 

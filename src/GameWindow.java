@@ -31,11 +31,12 @@ public class GameWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                   // gameCanvas.player.angle = 30;
+                    System.out.println("hello");
+                        gameCanvas.player.angle = 30;
 
                 }
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                   // gameCanvas.player.angle = -30;
+                        gameCanvas.player.angle = -30;
                 }
             }
 
