@@ -34,7 +34,7 @@ public class GameCanvas extends JPanel {
         this.setupBackBuffered();
         this.backGround = new BackGround(0, 0, Color.black);
 
-        this.player = new Player(new Vector2D(200, 200), new Vector2D(2,0));
+        this.player = new Player(new Vector2D(200, 200), new Vector2D(5,0));
         this.player.position.set(200, 200);
 
         random = new Random();
