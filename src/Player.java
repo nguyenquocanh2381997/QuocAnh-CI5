@@ -1,30 +1,33 @@
 import java.awt.*;
 
-public class Player {
-    public Vector2D position;
-    public Vector2D velocity;
-    private PlayerMove playerMove;
-    private PolygonRenderer renderer;
-    public int angle;
+public class Player extends GameObject {
 
+    public PlayerMove playerMove;
+    public PlayerShoot playerShoot;
 
-    public Player(Vector2D position, Vector2D velocity) {
-        this.position = position;
-        this.velocity = velocity;
-        this.renderer = new PolygonRenderer(Color.red,
+    public Player() {
+        this.position = new Vector2D();
+        this.renderer = new PolygonRenderer(Color.RED,
                 new Vector2D(),
                 new Vector2D(0, 16),
                 new Vector2D(20, 8)
         );
         this.playerMove = new PlayerMove();
+        this.playerShoot = new PlayerShoot();
     }
 
+    @Override
     public void run() {
+        super.run();
         this.playerMove.run(this);
-        this.position.addUp(this.velocity.rotate(this.angle));
+        ((PolygonRenderer)this.renderer).angle = this.playerMove.angle;
+        this.playerShoot.run(this);
+        this.playerShoot.bulletPlayers.forEach(bulletPlayer -> bulletPlayer.run());
     }
 
+    @Override
     public void render(Graphics graphics) {
-        this.renderer.render(graphics, this.position);
+        super.render(graphics);
+        this.playerShoot.bulletPlayers.forEach(bulletPlayer -> bulletPlayer.render(graphics));
     }
 }

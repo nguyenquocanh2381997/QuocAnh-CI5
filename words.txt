@@ -1,0 +1,4 @@
+apple
+word
+linux
+green
